@@ -1,11 +1,11 @@
-export default function Radiografia() {
+export default function PlanCancelacion() {
   return (
     <div className="p-10 text-center">
       <h1 className="text-3xl font-semibold text-gray-700 mb-4">
-        Radiografía Financiera
+        Plan de Cancelación
       </h1>
       <p className="text-gray-500">
-        Aquí podrás analizar tus ingresos, gastos y deudas.
+        Diseña tu estrategia de pago de deudas paso a paso.
       </p>
     </div>
   );

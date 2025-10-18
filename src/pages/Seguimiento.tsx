@@ -1,11 +1,11 @@
-export default function Radiografia() {
+export default function Seguimiento() {
   return (
     <div className="p-10 text-center">
       <h1 className="text-3xl font-semibold text-gray-700 mb-4">
-        Radiografía Financiera
+        Seguimiento Mensual
       </h1>
       <p className="text-gray-500">
-        Aquí podrás analizar tus ingresos, gastos y deudas.
+        Monitorea tus avances financieros cada mes.
       </p>
     </div>
   );
