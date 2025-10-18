@@ -60,7 +60,7 @@ export default function Deudas() {
           <div className="card-body">
             <ol className="list-decimal pl-6 space-y-2">
               {snowball.map((d, idx) => (
-                <li key={d.id} className="flex justify-between">
+                <li key={d.id} className="py-2 flex justify-between">
                   <span>#{idx+1} {d.creditor} — {d.type}</span>
                   <span>${Number(d.balance).toLocaleString()} <span className="text-slate-500 text-sm">(mín {Number(d.min_payment).toLocaleString()})</span></span>
                 </li>

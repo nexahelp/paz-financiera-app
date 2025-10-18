@@ -3,27 +3,28 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@lib/supabaseClient'
 import { getActiveHouseholdId } from '@lib/households'
 
+type Summary = { ingresos:number, gastos:number, deuda:number, fondo:number }
+
 export default function Dashboard() {
-  const [summary, setSummary] = useState<{ ingresos:number, gastos:number, deuda:number, fondo:number }|null>(null)
+  const [summary, setSummary] = useState<Summary|null>(null)
 
   useEffect(() => {
     (async () => {
       const user = (await supabase.auth.getUser()).data.user
       if (!user) return
       const householdId = await getActiveHouseholdId()
-
-      const filters = (q:any) => householdId ? q.eq('household_id', householdId) : q.eq('user_id', user.id)
+      const filter = (q:any) => householdId ? q.eq('household_id', householdId) : q.eq('user_id', user.id)
 
       const [{ data: inc }, { data: exp }, { data: deb }, { data: fund }] = await Promise.all([
-        filters(supabase.from('incomes').select('amount')),
-        filters(supabase.from('expenses').select('amount')),
-        filters(supabase.from('debts').select('balance')),
-        filters(supabase.from('savings_fund').select('current')).maybeSingle()
+        filter(supabase.from('incomes').select('amount')),
+        filter(supabase.from('expenses').select('amount')),
+        filter(supabase.from('debts').select('balance')),
+        filter(supabase.from('savings_fund').select('current')).maybeSingle()
       ])
 
-      const ingresos = (inc ?? []).reduce((a, b:any) => a + Number(b.amount), 0)
-      const gastos = (exp ?? []).reduce((a, b:any) => a + Number(b.amount), 0)
-      const deuda = (deb ?? []).reduce((a, b:any) => a + Number(b.balance), 0)
+      const ingresos = (inc ?? []).reduce((a:number, b:any) => a + Number(b.amount), 0)
+      const gastos = (exp ?? []).reduce((a:number, b:any) => a + Number(b.amount), 0)
+      const deuda = (deb ?? []).reduce((a:number, b:any) => a + Number(b.balance), 0)
       const fondo = fund?.current ? Number(fund.current) : 0
       setSummary({ ingresos, gastos, deuda, fondo })
     })()

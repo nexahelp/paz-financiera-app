@@ -20,7 +20,6 @@ export default function Tareas() {
   async function addTask() {
     const user = (await supabase.auth.getUser()).data.user
     await supabase.from('tasks').insert({ title, due_date: due || null, user_id: user!.id })
-    // Enviar correo (si hay EmailJS configurado)
     const { data: prof } = await supabase.from('profiles').select('full_name,email').eq('user_id', user!.id).maybeSingle()
     if (prof?.email) await sendTaskEmail(prof.email, prof.full_name, title, due)
     setTitle(''); setDue(''); refresh()

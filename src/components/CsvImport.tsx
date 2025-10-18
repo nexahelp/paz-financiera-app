@@ -12,11 +12,11 @@ export default function CsvImport({ table, mapping }:{ table:Table, mapping:Reco
     const householdId = await getActiveHouseholdId()
     Papa.parse(file, {
       header: true,
-      complete: async (results) => {
+      complete: async (results: Papa.ParseResult<any>) => {
         const rows = (results.data as any[]).filter(Boolean).map(r => {
           const obj:any = { user_id: user!.id }
           if (householdId) obj.household_id = householdId
-          Object.entries(mapping).forEach(([csvKey, dbKey]) => { obj[dbKey] = r[csvKey] })
+          Object.entries(mapping).forEach(([csvKey, dbKey]) => { obj[dbKey] = (r as any)[csvKey] })
           ;['amount','balance','min_payment','rate'].forEach(k=>{ if(obj[k]!==undefined) obj[k]=Number(String(obj[k]).replace(',','.'))||0 })
           if (obj['essential']!==undefined) obj['essential'] = String(obj['essential']).toLowerCase() in { 'true':1, '1':1, 'si':1, 'sí':1 }
           return obj
