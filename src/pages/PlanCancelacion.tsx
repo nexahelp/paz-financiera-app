@@ -1,12 +1,1 @@
-export default function PlanCancelacion() {
-  return (
-    <div className="p-10 text-center">
-      <h1 className="text-3xl font-semibold text-gray-700 mb-4">
-        Plan de Cancelación
-      </h1>
-      <p className="text-gray-500">
-        Diseña tu estrategia de pago de deudas paso a paso.
-      </p>
-    </div>
-  );
-}
+export default function PlanCancelacion(){return(<div className='p-10 text-center'><h1 className='text-3xl font-semibold text-gray-700 mb-4'>Plan de Cancelación</h1><p className='text-gray-500'>Diseña tu estrategia de pago de deudas paso a paso.</p></div>);}

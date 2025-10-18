@@ -13,11 +13,6 @@
     "jsx": "react-jsx",
     "strict": false,
     "baseUrl": ".",
-    "paths": {
-      "@lib/*": ["src/lib/*"],
-      "@pages/*": ["src/pages/*"],
-      "@components/*": ["src/components/*"]
-    },
     "types": ["vite/client"]
   },
   "include": ["src"]

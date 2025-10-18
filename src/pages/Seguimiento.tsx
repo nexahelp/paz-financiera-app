@@ -1,12 +1,1 @@
-export default function Seguimiento() {
-  return (
-    <div className="p-10 text-center">
-      <h1 className="text-3xl font-semibold text-gray-700 mb-4">
-        Seguimiento Mensual
-      </h1>
-      <p className="text-gray-500">
-        Monitorea tus avances financieros cada mes.
-      </p>
-    </div>
-  );
-}
+export default function Seguimiento(){return(<div className='p-10 text-center'><h1 className='text-3xl font-semibold text-gray-700 mb-4'>Seguimiento Mensual</h1><p className='text-gray-500'>Monitorea tus avances financieros cada mes.</p></div>);}
