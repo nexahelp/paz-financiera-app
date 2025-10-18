@@ -22,3 +22,7 @@ function App() {
 }
 
 export default App;
+
+if (!import.meta.env.VITE_SUPABASE_URL) {
+  return <div className="p-10 text-center text-red-600">Error: Falta configuración de Supabase.</div>;
+}
