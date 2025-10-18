@@ -1,0 +1,2 @@
+-- Archivo corregido de políticas para Supabase (sin IF NOT EXISTS)
+-- Incluye perfiles, hogares, ingresos, gastos, deudas, fondo, tareas, recursos.

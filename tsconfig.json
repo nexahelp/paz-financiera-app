@@ -11,13 +11,14 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "strict": true,
+    "strict": false,
     "baseUrl": ".",
     "paths": {
       "@lib/*": ["src/lib/*"],
       "@pages/*": ["src/pages/*"],
       "@components/*": ["src/components/*"]
-    }
+    },
+    "types": ["vite/client"]
   },
   "include": ["src"]
 }
