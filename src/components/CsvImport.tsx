@@ -12,7 +12,7 @@ export default function CsvImport({ table, mapping }:{ table:Table, mapping:Reco
     const householdId = await getActiveHouseholdId()
     Papa.parse(file, {
       header: true,
-      complete: async (results: Papa.ParseResult<any>) => {
+      complete: async (results: any) => {                   
         const rows = (results.data as any[]).filter(Boolean).map(r => {
           const obj:any = { user_id: user!.id }
           if (householdId) obj.household_id = householdId
