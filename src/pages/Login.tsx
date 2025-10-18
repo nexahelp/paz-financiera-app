@@ -12,7 +12,12 @@ export default function Login() {
     setMessage(null);
 
     try {
-      const { error } = await supabase.auth.signInWithOtp({ email });
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: window.location.origin, // 👈 Redirige correctamente según el dominio (localhost o Vercel)
+        },
+      });
 
       if (error) throw error;
 
