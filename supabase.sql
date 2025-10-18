@@ -1,5 +1,5 @@
 
--- Esquema de Paz Financiera para Supabase (Postgres + RLS) v2
+-- Esquema de Paz Financiera para Supabase (Postgres + RLS) v2 (corregido)
 create extension if not exists "uuid-ossp";
 
 -- Profiles y coach
@@ -115,67 +115,82 @@ create or replace function in_same_household(u uuid, h uuid) returns boolean lan
 $$;
 
 -- Policies
--- PROFILES
-create policy if not exists "profiles read own or coach" on profiles for select using (auth.uid() = user_id or is_coach(auth.uid()));
-create policy if not exists "profiles upsert own" on profiles for all using (auth.uid() = user_id);
+create policy "profiles read own or coach" 
+on profiles for select 
+using (auth.uid() = user_id or is_coach(auth.uid()));
 
--- HOUSEHOLDS
-create policy if not exists "households member read" on households for select using (in_same_household(auth.uid(), id) or created_by = auth.uid() or is_coach(auth.uid()));
-create policy if not exists "households owner write" on households for all using (created_by = auth.uid());
+create policy "profiles upsert own" 
+on profiles for all 
+using (auth.uid() = user_id);
 
-create policy if not exists "household_members member read" on household_members for select using (in_same_household(auth.uid(), household_id) or is_coach(auth.uid()));
-create policy if not exists "household_members owner write" on household_members for all using (auth.uid() = user_id);
+create policy "households member read" 
+on households for select 
+using (in_same_household(auth.uid(), id) or created_by = auth.uid() or is_coach(auth.uid()));
 
--- INCOMES
-create policy if not exists "incomes select" on incomes
-  for select using (
-    user_id = auth.uid() or is_coach(auth.uid()) or (household_id is not null and in_same_household(auth.uid(), household_id))
-  );
-create policy if not exists "incomes modify" on incomes
-  for all using (
-    user_id = auth.uid() or (household_id is not null and in_same_household(auth.uid(), household_id))
-  );
+create policy "households owner write" 
+on households for all 
+using (created_by = auth.uid());
 
--- EXPENSES
-create policy if not exists "expenses select" on expenses
-  for select using (
-    user_id = auth.uid() or is_coach(auth.uid()) or (household_id is not null and in_same_household(auth.uid(), household_id))
-  );
-create policy if not exists "expenses modify" on expenses
-  for all using (
-    user_id = auth.uid() or (household_id is not null and in_same_household(auth.uid(), household_id))
-  );
+create policy "household_members member read" 
+on household_members for select 
+using (in_same_household(auth.uid(), household_id) or is_coach(auth.uid()));
 
--- DEBTS
-create policy if not exists "debts select" on debts
-  for select using (
-    user_id = auth.uid() or is_coach(auth.uid()) or (household_id is not null and in_same_household(auth.uid(), household_id))
-  );
-create policy if not exists "debts modify" on debts
-  for all using (
-    user_id = auth.uid() or (household_id is not null and in_same_household(auth.uid(), household_id))
-  );
+create policy "household_members owner write" 
+on household_members for all 
+using (auth.uid() = user_id);
 
--- SAVINGS FUND
-create policy if not exists "fund select" on savings_fund
-  for select using (
-    user_id = auth.uid() or is_coach(auth.uid()) or (household_id is not null and in_same_household(auth.uid(), household_id))
-  );
-create policy if not exists "fund modify" on savings_fund
-  for all using (
-    user_id = auth.uid() or (household_id is not null and in_same_household(auth.uid(), household_id))
-  );
+create policy "incomes select" 
+on incomes for select 
+using (user_id = auth.uid() or is_coach(auth.uid()) or (household_id is not null and in_same_household(auth.uid(), household_id)));
 
--- TASKS
-create policy if not exists "tasks select" on tasks
-  for select using (user_id = auth.uid() or is_coach(auth.uid()));
-create policy if not exists "tasks insert" on tasks
-  for insert with check (auth.uid() = user_id or is_coach(auth.uid()));
-create policy if not exists "tasks update" on tasks
-  for update using (auth.uid() = user_id or is_coach(auth.uid()));
-create policy if not exists "tasks delete" on tasks
-  for delete using (auth.uid() = user_id or is_coach(auth.uid()));
+create policy "incomes modify" 
+on incomes for all 
+using (user_id = auth.uid() or (household_id is not null and in_same_household(auth.uid(), household_id)));
 
--- RESOURCES
-create policy if not exists "resources read" on resources for select using (true);
-create policy if not exists "resources coach write" on resources for all using (is_coach(auth.uid()));
+create policy "expenses select" 
+on expenses for select 
+using (user_id = auth.uid() or is_coach(auth.uid()) or (household_id is not null and in_same_household(auth.uid(), household_id)));
+
+create policy "expenses modify" 
+on expenses for all 
+using (user_id = auth.uid() or (household_id is not null and in_same_household(auth.uid(), household_id)));
+
+create policy "debts select" 
+on debts for select 
+using (user_id = auth.uid() or is_coach(auth.uid()) or (household_id is not null and in_same_household(auth.uid(), household_id)));
+
+create policy "debts modify" 
+on debts for all 
+using (user_id = auth.uid() or (household_id is not null and in_same_household(auth.uid(), household_id)));
+
+create policy "fund select" 
+on savings_fund for select 
+using (user_id = auth.uid() or is_coach(auth.uid()) or (household_id is not null and in_same_household(auth.uid(), household_id)));
+
+create policy "fund modify" 
+on savings_fund for all 
+using (user_id = auth.uid() or (household_id is not null and in_same_household(auth.uid(), household_id)));
+
+create policy "tasks select" 
+on tasks for select 
+using (user_id = auth.uid() or is_coach(auth.uid()));
+
+create policy "tasks insert" 
+on tasks for insert 
+with check (auth.uid() = user_id or is_coach(auth.uid()));
+
+create policy "tasks update" 
+on tasks for update 
+using (auth.uid() = user_id or is_coach(auth.uid()));
+
+create policy "tasks delete" 
+on tasks for delete 
+using (auth.uid() = user_id or is_coach(auth.uid()));
+
+create policy "resources read" 
+on resources for select 
+using (true);
+
+create policy "resources coach write" 
+on resources for all 
+using (is_coach(auth.uid()));
